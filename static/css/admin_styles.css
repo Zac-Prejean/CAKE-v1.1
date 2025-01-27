@@ -1,16 +1,23 @@
 
 /* SCAN BAR */
-
 .search-bar { 
     width: 80vw;
   }  
   
-  .search-container{
+  .content-container{
     margin: 0px 10px 10px;
     padding: 50px 40px 30px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-
   } 
+
+  .admin-banner{
+    margin-bottom: 25px;
+  }
+
+  .search_header{
+    font-size: 20px;
+    color: #000;
+  }
 
   td select {
     padding: 3px;
@@ -42,12 +49,18 @@
 .designed-status{
     padding: 0px;
 }
-.table-banner{
-  background-color: #E285B5;
-  color: #FFF;
+.table-banner {  
+  background-color: #E285B5 !important;  
+  color: #FFF !important;  
 }
-
-
+.sku-box {  
+  display: inline-block;  
+  max-width: 250px;
+  word-wrap: break-word;  
+  overflow-wrap: break-word;  
+  padding: 5px; 
+  white-space: normal;
+} 
 @media screen and (min-width :600px) {
     .designed-status{
         padding: 40px;

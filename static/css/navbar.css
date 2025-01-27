@@ -1,10 +1,13 @@
 /* NavBar */
 
-  nav {
-    width: 100%; 
-    background-image: url("../images/Banner-02.png");
-    background-color: #E65EA4;
-  }
+  nav {  
+    width: 100%;  
+    background-image: url("../images/Banner-02.png");  
+    background-color: #E65EA4;  
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center;
+  } 
   nav .wrapper {
     position: relative;
     padding: 10px 30px;
@@ -24,8 +27,9 @@
     display: inline-flex;
   }
   .cakeLogo {
-    width: 150px;
-    margin: -5px;
+    width: 165px;
+    margin-top: -10px;
+
   }
   .nav-links li{
     list-style: none;
@@ -142,6 +146,10 @@
   .desktop-item.production-btn:hover {  
     background: #3A4B58;  
   }  
+
+.signedInUser {
+  margin: 20px;
+}
 
 @media screen and (max-width: 670px) {
   .wrapper .btn{
