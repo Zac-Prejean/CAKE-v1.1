@@ -1,4 +1,4 @@
-
+// tally.js
 
 function reloadPage() { 
     setTimeout(() => {  

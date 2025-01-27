@@ -1,14 +1,71 @@
 // shipOut.js
+
 let matchedImages = [];
 let currentIndex = 0;
 let order = [];
 
 window.onload = function() {
     document.getElementById("shipButton").style.display = "none";
-  };
+};
+
 function handleScannerInput(event) {
+    let scanned_number = event.target.value;
     if (event.key === "Enter") {
         checkInputValue();
+        event.preventDefault();
+        console.log("Scanned Number:", scanned_number);
+
+        if (!scanned_number) {
+            // Clear the display fields if the scanned input is empty
+            clearDisplayFields();
+            return;
+        }
+
+        let dataToSend = {
+            signedInEmployeeName: signedInEmployeeName
+        };
+
+        if (scanned_number.length === 14) {
+            dataToSend.line_id = scanned_number;
+        } else {
+            dataToSend.custom_id = scanned_number;
+        }
+
+        // Determine the station type based on the form ID
+        let station = 'shipped';
+
+        $.ajax({
+            url: `/scan/${station}`,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(dataToSend),
+            success: function(response) {
+                if (response.status === 'success') {
+                    showMessage('Status updated to Shipped', 'green');
+                } else {
+                    showMessage(response.message, 'red');
+                }
+
+                // Clear the input field and set focus back to it
+                $(event.target).find('input[name="scanned_number"]').val('').focus();
+            },
+            error: function(xhr) {
+                var error = JSON.parse(xhr.responseText);
+                showMessage(error.message, 'red');
+
+                // Clear the input field and set focus back to it
+                $(event.target).find('input[name="scanned_number"]').val('').focus();
+            }
+        });
+
+        function clearDisplayFields() {  
+            $('#sku').text('');  
+            $('#qty').text('');  
+            $('#details').text('');  
+            $('#item_id').text('');  
+            $('#order_id').text('');  
+            $('#scanImage').hide();  
+        }  
     }
 }
 
@@ -120,3 +177,7 @@ function hideshipbutton() {
 function showshipbutton() {
     document.getElementById("shipButton").style.display = "block";
 }
+
+$(document).ready(function(){  
+    $('[data-toggle="tooltip"]').tooltip();   
+});  

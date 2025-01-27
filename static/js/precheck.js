@@ -110,9 +110,13 @@ import { prefixACSKTUM16ZPNK, prefixACSKTUM16ZBLK, prefixACSKTUM16ZICB, prefixAC
 
                     }
                     if (options && (options.includes(', print_url:') || options.includes(', print_url_1:'))) {
+                        const skuWithoutCLabel = row[2].replace("DLABEL", "");
+                        row[2] = "DLABEL" + skuWithoutCLabel;    
+                    }  
+                    if (options && (options.includes(', Art Location 1:'))) {
                         const skuWithoutCLabel = row[2].replace("CLABEL", "");
                         row[2] = "CLABEL" + skuWithoutCLabel;    
-                    }  
+                    }
                     if (options && (options.includes(', Art_Location_Front:') || options.includes(', Art_Location_Back:'))) {  
                         const skuWithoutBLabel = row[2].replace("BLABEL", "");   
                         row[2] = "BLABEL" + skuWithoutBLabel;  
@@ -140,7 +144,7 @@ import { prefixACSKTUM16ZPNK, prefixACSKTUM16ZBLK, prefixACSKTUM16ZICB, prefixAC
       
                             let icon; 
 
-                            if (sku.startsWith("CLABEL") || sku.startsWith("BLABEL")) {  
+                            if (sku.startsWith("CLABEL") || sku.startsWith("BLABEL") || sku.startsWith("DLABEL")) {  
                                 icon = goodCheckUrl;
                             } else if (!validSkus.includes(sku)) {    
                                 icon = unknownDesignUrl;  

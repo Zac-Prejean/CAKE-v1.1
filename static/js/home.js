@@ -25,9 +25,11 @@ function getImageSource(date) {
         return "/static/images/home/aprilfools.png";
     } else if (month === 4 && day >= 2 && day <= 30) {   
         return "/static/images/home/spring.png";
-    } else if (month === 5 && day >= 1 && day <= 14) {   
+    } else if (month === 5 && day >= 1 && day <= 8) {   
+        return "/static/images/home/spring.png";
+    } else if (month === 5 && day >= 9 && day <= 16) {   
         return "/static/images/home/mothersday.png";
-    } else if (month === 5 && day >= 15 && day <= 23) {   
+    } else if (month === 5 && day >= 17 && day <= 23) {   
         return "/static/images/home/spring.png";
     } else if (month === 5 && day >= 24 && day <= 31) {   
         return "/static/images/home/memorialday.png";
@@ -70,3 +72,7 @@ function getImageSource(date) {
   document.addEventListener('DOMContentLoaded', function () {  
     updateImageSource();  
   }); 
+
+  $(document).ready(function(){  
+    $('[data-toggle="tooltip"]').tooltip();   
+});  
