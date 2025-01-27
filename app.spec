@@ -4,9 +4,9 @@
 a = Analysis(
     ['app.py'],
     pathex=[],
-    binaries=[('hidapi.dll', '.'), ('sqlite3.dll', '.'), ('sqlite3.def', '.')],
-    datas=[('background', './background'), ('fonts', './fonts'), ('templates', './templates'), ('static', './static'), ('sku_to_item_description.json', './'), ('dtg_item_description.json', './')],
-    hiddenimports=[],
+    binaries=[],
+    datas=[('background', './background'), ('fonts', './fonts'), ('templates', './templates'), ('static', './static'), ('dtg_item_description.json', '.'), ('sku_to_item_description.json', '.'), ('hidapi.dll', '.'), ('hidapi.lib', '.'), ('hidapi.pdb', '.')],
+    hiddenimports=['requests', 'config', 'img2pdf'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

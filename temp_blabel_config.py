@@ -121,7 +121,7 @@ def add_order_number_to_blabel_pdf(sku, row, folder_name, blabel_item_name, inde
 
             # QR code for bin_design_number 
             # if multi_order:
-            bin_design_number = str(row['Item - Options']).strip('"')
+            bin_design_number = str(row['Order - Number']).strip('"')
             qr_bin = qrcode.QRCode(  
                 version=1,  
                 error_correction=qrcode.constants.ERROR_CORRECT_L,  
@@ -159,7 +159,7 @@ def add_order_number_to_blabel_pdf(sku, row, folder_name, blabel_item_name, inde
             
             # Get the current date and format it    
             current_date = datetime.datetime.now().strftime("%m%d%Y")
-            due_date = row['Item - Name'].replace(" 16:00", "").replace(" 4:00:00 pm", "")
+            due_date = row['Order - Date'].replace(" 16:00", "").replace(" 4:00:00 pm", "")
             # Set font, font size, and font color for the date    
             font_size_date = 5      
             c.setFont("Pixel-Tandy", font_size_date)      
@@ -215,7 +215,7 @@ def add_order_number_to_blabel_pdf(sku, row, folder_name, blabel_item_name, inde
 
             # QR code for order_number
             # qr_order_number_img = generate_order_number_qr(str(row[3]).replace("Art_Location_Front: ", "").replace("Art_Location_Back: ", ""))
-            tagID = (str(row[3]).replace("Art_Location_Front: ", "").replace("Art_Location_Back: ", ""))        
+            tagID = (str(row.iloc[3]).replace("Art_Location_Front: ", "").replace("Art_Location_Back: ", ""))        
             qr_order_number_img = generate_order_number_qr(tagID)  
             # Draw the order number QR code on the canvas with the desired size  
             process_qr_image(qr_order_number_img, 7, 83.5, 52, 52, aspect_ratio=1) # (x, y, width, height)

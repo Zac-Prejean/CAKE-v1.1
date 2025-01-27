@@ -13,7 +13,7 @@ from reportlab.lib.utils import simpleSplit
 from reportlab.lib.utils import ImageReader  
 from reportlab.pdfbase.ttfonts import TTFont  
 from wand.image import Image as WandImage  
-from PyPDF2 import PdfReader, PdfWriter  
+from PyPDF2 import PdfReader, PdfWriter 
 
 # install ghostscript and ImageMagick
 # https://ghostscript.com/releases/gsdnld.html

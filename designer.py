@@ -1,3 +1,5 @@
+# designer.py
+
 import os
 import json  
 from config import *
@@ -60,9 +62,7 @@ def process_personalization_text(text, clean_sku):
  
 
     return '\n'.join(processed_lines) 
-
-
-    
+   
 # Load font from the given font path and font size    
 def load_font(font_path, font_size):    
     try:    
@@ -126,32 +126,97 @@ def get_font_size_placement_from_sku(sku, num_chars):
     else:      
         font_size, x, y = values  
       
-    return font_size, x, y   
+    return font_size, x, y
+   
+def check_existing_customtagID(lineID):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        check_query = "SELECT custom_id FROM cake.DTG_STATUS WHERE line_id = ?"
+        cursor.execute(check_query, (lineID,))
+        result = cursor.fetchone()
+        if result:
+            return result[0]
+        return None
+    except Exception as e:
+        print(f"Error checking existing customtagID: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
     
-# white background for RNG   
-def draw_white_background(draw, x, y, text_width, text_height, margin_left= 0, margin_right=-70,):  
-    draw.rectangle([x + margin_left, y, x + text_width + margin_right, y + text_height], fill=(255, 255, 255))   
   
-# Process each row from the dataframe    
+def download_image(url, save_path):  
+    headers = {  
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'  
+    }  
+    try:  
+        response = requests.get(url, headers=headers)  
+        response.raise_for_status()  
+        with open(save_path, 'wb') as file:  
+            file.write(response.content)  
+        print(f"Image downloaded: {save_path}")  
+    except requests.exceptions.RequestException as e:  
+        print(f"Error downloading image: {e}")  
+
+  
 def process_row(index, row, folder_name, sku, clean_sku, qty_index, load_font, order_quantities, order_skus, process_label, process_pick, order_item_count, process_image):  
     print('')  
     print(f"Processing row: {index}, clean_sku: {clean_sku}")  
-    sku = row['Item - SKU']  
     order_number = str(row['Order - Number']).strip('"')  
-    order_total_qty = order_quantities[order_number] 
-    txt_output_folder = os.path.join(CAKE_PATH, 'Batch.txt', 'DTG', 'status')  
-    item_options = str(row['Item - Options'])  
     item_qty = int(row['Item - Qty'])  
+    sku = row['Item - SKU']  
+    item_options = str(row['Item - Options'])  
     custom_field_3 = row['Custom - Field 3']  
   
+    # Print item options for debugging  
+    print(f"Item Options: {item_options}")  
+  
+    def process_sku(sku, item_options, folder_name, order_number, index):  
+        sku_patterns = {  
+            'CLABEL': {  
+                'pattern': r'Art Location 1:\s*(https?://[^\s,]+(?:\s[^\s,]+)*)',  
+                'extension': 'png'  
+            },  
+            'DLABEL': {  
+                'pattern': r'print_url:\s*(https?://[^\s,]+(?:\s[^\s,]+)*)',  
+                'extension': 'pdf'  
+            }  
+        }  
+    
+        for prefix, config in sku_patterns.items():  
+            if sku.startswith(prefix):  
+                url_match = re.search(config['pattern'], item_options)  
+                if url_match:  
+                    full_url = url_match.group(1).strip()  
+                    save_path = os.path.join(folder_name, f"{order_number}_{sku}_{index}.{config['extension']}")  
+                    print(f"Extracted URL: {full_url}")  # Debug: Print the extracted URL  
+                    download_image(full_url, save_path)  
+                else:  
+                    print(f"No URL found for pattern: {config['pattern']}")  
+                return  
+
+    process_sku(sku, item_options, folder_name, order_number, index)  
+  
     if process_label:  
-        customtagID = generate_custom_id_tag()  # Generate customtagID for each item within the order  
-         
-        create_txt_file(order_number, item_options, sku, index, order_total_qty, txt_output_folder, custom_field_3, customtagID)  
-        add_tag(customtagID, item_options, order_number, sku, custom_field_3, 0)
-        create_labels(index, row, folder_name, sku, clean_sku, order_quantities, order_skus, process_label, order_item_count, order_total_qty, txt_output_folder, customtagID)
-        
-        get_order_images(order_number, item_qty, item_options, customtagID)
+        lineID = str(row['Line - ID']).replace('.0', '')  
+  
+        # Check if the line_id already exists in the database and get the customtagID  
+        existing_customtagID = check_existing_customtagID(lineID)  
+        if existing_customtagID:  
+            customtagID = str(existing_customtagID)  # Convert to string  
+            print(f"Using existing customtagID: {customtagID}")  
+        else:  
+            customtagID = generate_custom_id_tag(row)  # Generate customtagID for each item within the order  
+            customtagID = str(customtagID)  # Convert to string  
+            print(f"Generated new customtagID: {customtagID}")  
+  
+        order_total_qty = int(row['Total Order Qty'])  
+        order_date = row['Order - Date']  
+        add_status(row, customtagID)  
+        add_tag(customtagID, item_options, order_number, sku, custom_field_3, 0)  
+        create_labels(index, row, folder_name, sku, clean_sku, order_quantities, order_skus, process_label, order_item_count, order_total_qty, customtagID)  
+        get_order_images(order_number, item_qty, item_options, customtagID)  
   
     # Image processing code  
     clean_sku_match = re.search(r"(?:DSWCLR001)?UVP[A-Z0-9]+|JMUG11WB[A-Z0-9]+", sku)  
@@ -168,6 +233,7 @@ def process_row(index, row, folder_name, sku, clean_sku, qty_index, load_font, o
   
     # skus without personalization_text  
     personalization_text = row['Item - Options']  
+    
     if not personalization_text or not str(personalization_text).strip() or str(personalization_text).lower() == "nan":  
         is_saved, image_path = save_image_without_options(sku, clean_sku, order_number, index, qty_index, background_image_path, folder_name, row, load_font, item_qty, order_quantities, order_skus)  
         if is_saved:  
@@ -273,18 +339,17 @@ def process_row(index, row, folder_name, sku, clean_sku, qty_index, load_font, o
         # draw the current line  
         draw.text((text_x, text_y), line, fill=process_font_color(font_color, clean_sku, i), font=font)  
   
-    # flip the image horizontally and add barcode  
-    image, draw = flip_mug_image(image, sku)  
+    # flip the image horizontally  
+    image, draw = flip_mug_image(image, sku) 
+    # add barcode  
     add_order_number_to_jmug(draw, sku, row, load_font)  
     # add indicators  
-    if sku.startswith("JMUG11WB"):  
-        add_order_indicators(draw, sku, row, item_qty, order_quantities, order_skus)  
+    add_order_indicators(draw, sku, row, item_qty, order_quantities, order_skus)  
     # name the saved png  
     image_result = save_image_with_subfolders(clean_sku, sku, order_number, index, qty_index, item_options, folder_name, image)  
     if image_result is not None:  
         image_path, image_name = image_result  
-
-
+  
 script_dir = os.path.dirname(os.path.abspath(__file__))  
 background_pdf_path = os.path.join(script_dir, 'background', 'clabel', 'pick_list.pdf')  
 
@@ -314,8 +379,7 @@ def export_images(df, full_folder_path, process_image, process_label, process_pi
             for qty_index in range(item_qty):
                 sku = row['Item - SKU'].strip()  
                 process_row(index, row, full_folder_path, sku, clean_sku, qty_index, load_font, order_quantities, order_skus, process_label, process_pick, order_item_count=order_item_counts[order_number], process_image=process_image)  
-     
-            txt_output_folder = os.path.join(CAKE_PATH, 'Batch.txt', 'DTG', 'status')  
+      
             custom_field_3 = row['Custom - Field 3']  
             if not custom_field_3 or str(custom_field_3).strip().lower() == "nan":  
                 custom_field_3 = "DefaultStatus"  
@@ -339,4 +403,4 @@ def export_images(df, full_folder_path, process_image, process_label, process_pi
         print(f"An error occurred: {e}")  
         return {"error": str(e)}  
 
-    
+  

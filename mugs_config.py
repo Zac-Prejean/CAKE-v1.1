@@ -31,8 +31,7 @@ def add_order_number_to_jmug(draw, sku, row, load_font):
             draw.text((80, 790), order_number, fill=processed_font_color, font=font_order_number)  # position 
 
 def add_order_indicators(draw, sku, row, item_qty, order_quantities, order_skus):  
- 
-    if re.match(r"JMUG11WB[A-Z0-9]*", sku):  
+    if re.match(r"JMUG11WB", sku):  
  
         # EXPEDITED square    
         order_number = str(row['Order - Number']).strip('"')    
@@ -141,6 +140,7 @@ sku_to_image = {
     "JMUG11WBUVPPSBFCEUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'customizable', 'UVPPSBFCEUVP.png'),
     "JMUG11WBUVPJMFDCM7UVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'customizable', 'UVPJMFDCM7UVP.png'),
     "JMUG11WBUVPPSBMMMUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'customizable', 'UVPPSBMMMUVP.png'),
+    "JMUG11WBUVPPSPBSBMUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'customizable', 'UVPPSPBSBMUVP.png'),
 
     # fav child
     "JMUG11WBUVPPSFAVCHUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'customizable', 'UVPPSFAVCHUVP.png'),
@@ -259,7 +259,10 @@ sku_to_image = {
     "JMUG11WBUVPPSINAMUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'stable', 'UVPPSINAMUVP.png'),
     "JMUG11WBUVPJMSJSSMUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'stable', 'UVPJMSJSSMUVP.png'),
     "JMUG11WBUVPPSTHCTWUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'stable', 'UVPPSTHCTWUVP.png'),
-
+    "JMUG11WBUVPZZ04": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'stable', 'UVPZZ04.png'),
+    "JMUG11WBUVPZZ11": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'stable', 'UVPZZ11.png'),
+    "JMUG11WBUVPZZ12": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'stable', 'UVPZZ12.png'),
+    "JMUG11WBUVPPSAYLMUVP": os.path.join(os.path.dirname(os.path.realpath(__file__)), 'background', 'mugs', 'stable', 'UVPPSAYLMUVP.png'),
 }
 
 sku_to_font = {
@@ -320,6 +323,7 @@ sku_to_font = {
     'JMUG11WBUVPPSBFCEUVP': os.path.join(script_dir, 'fonts', 'AmaticSC-Bold.ttf'),
     'JMUG11WBUVPJMFDCM7UVP': os.path.join(script_dir, 'fonts', 'AmaticSC-Bold.ttf'),
     'JMUG11WBUVPPSBMMMUVP': os.path.join(script_dir, 'fonts', 'AmaticSC-Bold.ttf'),
+    'JMUG11WBUVPPSPBSBMUVP': os.path.join(script_dir, 'fonts', 'BebasNeue-Regular.ttf'),
 
     # fav child
     "JMUG11WBUVPPSFAVCHUVP": os.path.join(script_dir, 'fonts', 'AmaticSC-Regular.ttf'),
@@ -696,6 +700,13 @@ sku_to_fontsize_placement = {  # (font-size, x, y)
         11: (140, 340), 12: (130, 340), 13: (130, 340), 14: (130, 340), 15: (130, 340), 
         16: (120, 350), 17: (120, 350), 18: (110, 350), 19: (110, 350), 20: (100, 360),
         21: (100, 360), 22: (100, 360), 23: (100, 360), 24: (80, 360),  25: (80, 360),
+    },
+    'JMUG11WBUVPPSPBSBMUVP': {
+         1: (110, 100),  2: (110, 100), 3: (110, 100),  4: (110, 100),  5: (110, 100),  
+         6: (110, 100),  7: (110, 100),  8: (110, 100),  9: (100, 100), 10: (100, 100),  
+        11: (100, 100), 12: (90, 100), 13: (90, 100), 14: (90, 100), 15: (90, 100), 
+        16: (80, 110), 17: (80, 110), 18: (70, 110), 19: (70, 110), 20: (60, 120),
+        21: (60, 120), 22: (60, 120), 23: (60, 120), 24: (40, 120), 25: (40, 120),
     },
 
     # fav child

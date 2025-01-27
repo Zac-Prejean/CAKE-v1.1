@@ -1,15 +1,14 @@
+# create_label.py
 
 from config import * 
-from temp_blabel_config import add_order_number_to_blabel_pdf  
-from api_download import get_front_back
-def create_labels(index, row, folder_name, sku, clean_sku, order_quantities, order_skus, process_label, order_item_count, order_total_qty, txt_output_folder,  customtagID):  
+
+def create_labels(index, row, folder_name, sku, clean_sku, order_quantities, order_skus, process_label, order_item_count, order_total_qty,  customtagID):  
     DOWNLOAD_FOLDER = str(Path.home() / 'Downloads') 
     if remote_activator == 1:
         dtg_folder = DOWNLOAD_FOLDER
     else:
         dtg_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), '\\\\comwin2k19dc01\\Shares\\Designs-DTG')  
     
-  
     custom_field_3 = row['Custom - Field 3']  
     sku = row['Item - SKU']  
     order_number = str(row['Order - Number']).strip('"')  
@@ -22,7 +21,7 @@ def create_labels(index, row, folder_name, sku, clean_sku, order_quantities, ord
         else:  
             bundle_dir = os.path.dirname(os.path.abspath(__file__))  
         
-        json_path = Path(bundle_dir)  # This should be outside the else block  
+        json_path = Path(bundle_dir)
         sku_path = json_path / "sku_to_item_description.json"  
         dtg_path = json_path / "dtg_item_description.json"   
     

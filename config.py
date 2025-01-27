@@ -1,3 +1,5 @@
+# config.py
+
 import os    
 import re    
 import io    
@@ -17,20 +19,23 @@ import tempfile
 import threading 
 import subprocess
 import pandas as pd
+import pyodbc as odbc
 from pathlib import Path 
-from process_xlsx_file import process_file_data
 from threading import Lock
 from datetime import datetime 
 from urllib.parse import urlparse
-from temp_blabel_config import create_blabel_path
 from werkzeug.utils import secure_filename  
 from apscheduler.schedulers.background import BackgroundScheduler 
 from clabel_config import create_png_path
 from reportlab.lib.utils import ImageReader  
 from flask import Flask, send_file, jsonify, render_template, request, Response, stream_with_context, redirect, url_for, send_from_directory, session
 from PIL import Image, ImageDraw, ImageFont
+from PyPDF2 import PdfReader, PdfWriter
 from reportlab.lib.pagesizes import letter  
-from reportlab.pdfgen import canvas 
+from reportlab.pdfgen import canvas
+from sqlalchemy.ext.declarative import declarative_base 
+from sqlalchemy import create_engine, Column, Integer, String, text  
+from sqlalchemy.orm import sessionmaker
 
 
 ##############################GLobal path changer#####################################
@@ -52,23 +57,29 @@ else:
 
 images_saved_in_subfolder = 0  
 current_mug_subfolder = 1 
- 
-from api_download import (
-    create_txt_file, generate_custom_id_tag, process_csv, get_order_images
-) 
+from admin import get_all_status, get_connection, init_admin_routes
+from cubby import init_cubby_routes, get_cubby
+from status import add_status, init_status_routes
+from precheck import init_precheck_routes
+from redo import init_redo_routes
+from JEWELRY_REDO_DB import add_redo, get_all_redos
+from PIL import Image, ImageDraw, ImageFont
+from tally import get_all 
+from redo import init_redo_routes
+from shipOut import init_ship_out_routes
+from tally import get_all, get_today_started_total, get_today_ended_total
+from temp_blabel_config import create_blabel_path, add_order_number_to_blabel_pdf 
 
-from batchID import (
-     updateStatus, updateAllItemsStatus, getStatus, get_txt_files,
-)
+from api_download import (
+    process_csv, get_order_images, get_front_back
+) 
 from temp_blabel_config import (
     add_order_number_to_blabel_pdf,
 )
 from clabel_config import (
     add_order_number_to_clabel_pdf, create_label_with_blank_image
 )
-from create_labels import (
-    create_labels,
-)
+from create_labels import create_labels
 from pick_list import (  
     create_pick_list_pdf, background_pdf_path, export_images, match_sku_to_item_description  
 ) 
@@ -129,6 +140,32 @@ sku_to_fourth_fontsize_placement = {**glfbl_sku_to_four_fontsize_placement, **pl
 skip_line = {**tumbler_skip_line}    
   
 csv_load_count = 0  
+
+# Initialize used_numbers and current_index  
+used_numbers = set()  
+index_counter = 0  
+
+def generate_custom_id_tag(row):  
+    global index_counter  
+    
+    # Extract the date from row['Order - Date'] and format it as MMDD
+    order_date = row['Order - Date']
+    formatted_date = order_date[:2] + order_date[3:5]
+    
+    # Generate a 2-digit random number  
+    random_number = random.randint(10, 999)  
+    
+    # Ensure the random number is unique  
+    while random_number in used_numbers:  
+        random_number = random.randint(10, 999)  
+    used_numbers.add(random_number)  
+    
+    # Format the index to be 4 digits, incrementing by 1  
+    index = f"{index_counter:02d}"  
+    index_counter += 1  
+    
+    # Combine the components to form the custom ID  
+    return f"{random_number}{formatted_date}{index}"  
 
 # error skus     
 def create_check_csv_image(row, load_font):
@@ -200,7 +237,11 @@ def save_image_with_subfolders(clean_sku, sku, order_number, index, qty_index, i
         if images_saved_in_subfolder[sub_folder_name] >= 30:  
             current_mug_subfolder += 1  
             sub_folder_name = f'MUGS({current_mug_subfolder})'  
-            images_saved_in_subfolder[sub_folder_name] = 0  
+            images_saved_in_subfolder[sub_folder_name] = 0 
+    elif clean_sku.startswith("CLABEL"):
+         sub_folder_name = 'C_ORDERS'
+    elif clean_sku.startswith("DLABEL"):
+         sub_folder_name = 'DROPBOX_ORDERS'
     else:  
         sub_folder_name = ''  
   
@@ -256,7 +297,7 @@ def save_blank_image(row, sku, clean_sku, sku_to_font, order_number, index, back
         
         if "JMUG11WB" in sku.upper():    
             sub_folder_name = f'nonCustom_MUGS'
-            
+          
         if "WOOD66" in sku.upper():    
             sub_folder_name = '6X6'    
         elif "WOOD88" in sku.upper():    

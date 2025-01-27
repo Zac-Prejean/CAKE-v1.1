@@ -34,8 +34,11 @@ def get_connection():
 def add_tag(tag_ID, item_ID, order_number, sku, batch, status):
     try:
         connection = get_connection()
+        if connection is None:
+            print("Failed to connect to the database.")
+            return None
+
         cursor = connection.cursor()
-        print("Connected to SQL Server")
 
         # Data to insert
         tag_ID = str(tag_ID)
@@ -44,29 +47,32 @@ def add_tag(tag_ID, item_ID, order_number, sku, batch, status):
         sku = sku
         batch = batch
         status = status
-        # Insert data into the table in the 'cake' schema
+
+        # Check if the entry already exists
         match_query = "SELECT * FROM cake.DTG_TAG WHERE tag_ID = ?"
         cursor.execute(match_query, (tag_ID,))
         line_id_check = cursor.fetchall()
+
         if line_id_check:
-            print("Entry Already Exists in database", line_id_check)
-        
-        else:
-            insert_data_query = '''
-            INSERT INTO cake.DTG_TAG (tag_ID, item_ID, order_number, sku, batch, status)
-            VALUES (?, ?, ?, ?, ?, ?)
-            '''
+            print(f"Entry Already Exists in database {line_id_check}")
+            return line_id_check[0][0]  # Return the existing customtagID
+
+        # Insert data into the table in the 'cake' schema
+        insert_data_query = """
+        INSERT INTO cake.DTG_TAG (tag_ID, item_ID, order_number, sku, batch, status)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """
         cursor.execute(insert_data_query, (tag_ID, item_ID, order_number, sku, batch, status))
         connection.commit()
-        print("Data inserted successfully")
+        print("Data inserted successfully.")
+        return tag_ID
 
     except odbc.Error as ex:
-        print("Error:", ex)
+        print(f"An error occurred: {ex}")
+        return None
 
     finally:
-        # Close the connection
         if connection:
-            cursor.close()
             connection.close()
             print("Connection closed")
 

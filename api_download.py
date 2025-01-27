@@ -1,43 +1,6 @@
 
 from config import *
 
-# Initialize used_numbers and current_index  
-used_numbers = set()  
-current_index = 1  
- 
-def generate_custom_id_tag():  
-    global current_index  
-     
-    # Generate a unique 4-digit random number  
-    random_number = random.randint(1000, 9999)  
-    while random_number in used_numbers:  
-        random_number = random.randint(1000, 9999)  
-    used_numbers.add(random_number)  
-     
-    # Format the index to be 4 digits  
-    index_str = f"{current_index:04}"  
-     
-    # Increment the index and reset if necessary  
-    current_index += 1  
-    if current_index > 9999:  
-        current_index = 1  
-     
-    return f"{random_number}{index_str}"  
-
-def create_txt_file(order_number, item_options, sku, index, order_total_qty, txt_output_folder, custom_field_3, customtagID):  
-    current_datetime = datetime.now().strftime("%m-%d-%Y %H:%M")  
-    file_path = os.path.join(txt_output_folder, f"{custom_field_3}.txt")  
-    #archive_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '\\\\comwin2k19dc01\\Shares\\CAKE', 'Batch.txt', 'DTG', 'archive', f"{custom_field_3}_archive.txt")  
-    archive_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '\\\\192.168.80.254\\Shares\\CAKE', 'Batch.txt', 'DTG', 'archive', f"{custom_field_3}_archive.txt")  
-  
-    with open(file_path, 'a') as file:  
-        file.write(f"{customtagID}_{order_number}_{item_options}_{order_total_qty}_{sku}_{custom_field_3}_Designed_{current_datetime}_0\n")  
-  
-    with open(archive_path, 'a') as archive_file:  
-        archive_file.write(f"{customtagID}_{order_number}_{item_options}_{order_total_qty}_{sku}_{custom_field_3}_Archive_{current_datetime}_0\n")  
-  
-    return customtagID 
-
 def process_csv(file_path, order_number, item_qty, item_options, customtagID):  
     with open(file_path, newline='') as csvfile:  
         reader = csv.DictReader(csvfile)  
@@ -49,7 +12,6 @@ def get_order_images(order_number, item_qty, item_id, customtagID):
     url = "https://cwa.completeful.com/api/GetScannedOrderNumberDetails"  
     payload = json.dumps({"OrderNumber": order_number})  
     headers = {'Content-Type': 'application/json'}  
-    print("Debug")
     try:  
         response = requests.request("GET", url, headers=headers, data=payload)  
         #print(response)
@@ -59,8 +21,7 @@ def get_order_images(order_number, item_qty, item_id, customtagID):
            
         dictr = response.text  
         response_dict = json.loads(dictr)  
-        jsonob = response_dict["items"]    
-        print(f"Target Item: {item_id}")            
+        jsonob = response_dict["items"]                
         for item in jsonob:
             if str(item["orderItemId"]) == str(item_id):  
                 print(f"MATCH: {item_id}")

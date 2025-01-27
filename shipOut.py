@@ -138,16 +138,16 @@ def init_ship_out_routes(app):
         #barcode = request.json.get('barcode')
         input_bar = request.json.get('barcode')
         print(len(input_bar))
-        if len(input_bar) == 8:
+        if len(input_bar) < 11:
             print(len(input_bar))
             tag_ID = input_bar
             order_number = str(get_order_by_tag(tag_ID))
             #status = get_status_by_tag(tag_ID) 
-        if len(input_bar) > 9 and len(input_bar) < 17:
-            item_ID = input_bar
-            order_number = str(get_order_by_item_ID(item_ID))
-            #status = get_status_by_item_id(item_ID)
-        if len(input_bar) >17:
+        # if len(input_bar) > 11 and len(input_bar) < 17:
+        #     item_ID = input_bar
+        #     order_number = str(get_order_by_item_ID(item_ID))
+        #     status = get_status_by_item_id(item_ID)
+        if len(input_bar) > 17:
             order_number = input_bar
 
         print(order_number)
@@ -213,15 +213,15 @@ def init_ship_out_routes(app):
         use_sensors = 0
         #use_sensors = request.json.get('use_sensors') 
         print(len(input_bar))
-        if len(input_bar) == 8:
+        if len(input_bar) < 11:
             print(len(input_bar))
             tag_ID = input_bar
             order_number = str(get_order_by_tag(tag_ID))
             status = get_status_by_tag(tag_ID) 
-        if len(input_bar) > 9 and len(input_bar) < 17:
-            item_ID = input_bar
-            order_number = str(get_order_by_item_ID(item_ID))
-            status = get_status_by_item_id(item_ID)
+        # if len(input_bar) > 11 and len(input_bar) < 17:
+        #     item_ID = input_bar
+        #     order_number = str(get_order_by_item_ID(item_ID))
+        #     status = get_status_by_item_id(item_ID)
         if len(input_bar) >17:
             order_number = input_bar
 
