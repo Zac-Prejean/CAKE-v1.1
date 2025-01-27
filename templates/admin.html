@@ -20,97 +20,11 @@
   
 <body id="admin-page">  
   
-<header class="text-center">  
-  
-    <!-- NAV -->  
-    <nav>
-        <div class="wrapper">
-            <div class="cakeLogo">  
-                <a href="#"><img src="{{ url_for('static', filename='images/CakeSiteLogo.svg') }}" alt="Cake Logo"></a>  
-            </div> 
-            <input type="radio" name="slider" id="menu-btn">
-            <input type="radio" name="slider" id="close-btn">
-            <ul class="nav-links">
-            <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('admin') }}">Admin</a></li>
-            <li>
-                <button id="productionBtn" class="desktop-item production-btn">Production</button>   
-                <button id="productionBtnMobile" class="mobile-item production-btn">Production</button>
-                <div class="mega-box">
-                <div class="content">
-                    <div class="navrow jimjim">
-                    <img src="{{ url_for('static', filename='images/home/Imwatchingyou_edit.png') }}" class="jimjim" alt="Jimmy is Watching">
-                    </div>
-                    <div class="navrow">
-                    <header class="dropdown-header">PrintLayotLab</header>  
-                    <ul class="mega-links dropdown-links">
-                        <li><a class="m-0" href="{{ url_for('precheck') }}">  
-                        <img src="{{ url_for('static', filename='images/precheck.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Precheck Logo">  
-                    Precheck</a></li>
-                        <li><a class="m-0" href="{{ url_for('designer') }}">
-                        <img src="{{ url_for('static', filename='images/designer.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Template Logo">
-                    Designer</a></li>
-                        <li><a class="m-0" href="{{ url_for('templatemerger') }}">  
-                        <img src="{{ url_for('static', filename='images/template.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Designer Logo">  
-                    TemplateMerger</a></li>
-                    </ul>
-                    </div>
-                    <div class="navrow">  
-                    <header class="dropdown-header">ScanStations</header>  
-                    <ul class="mega-links dropdown-links">
-                        <li><a href="{{ url_for('scanIn') }}"><img src="{{ url_for('static', filename='images/scanIn.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Scan-In Logo">
-                        Scan-In</a></li>
-                        <li><a href="{{ url_for('printStation') }}"><img src="{{ url_for('static', filename='images/printstation.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Print Logo">
-                        PrintStation</a></li>
-                        <li><a href="{{ url_for('scanOut') }}"><img src="{{ url_for('static', filename='images/scanOut.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Scan-out Logo">
-                        Scan-Out</a></li>
-                    </ul>
-                    </div>
-                    <div class="navrow">  
-                    <header class="dropdown-header">ShippingStations</header>  
-                    <ul class="mega-links dropdown-links"> 
-                        <li><a href="{{ url_for('cubbysystem') }}"><img src="{{ url_for('static', filename='images/cubbyhole.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="CubbyHole Logo">
-                        CubbyHole</a></li>
-                        <li><a href="{{ url_for('shipOut') }}"><img src="{{ url_for('static', filename='images/shipping.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Ship-Out Logo">
-                        Ship-Out</a></li>
-                        <li><a href="{{ url_for('tallyPage') }}"><img src="{{ url_for('static', filename='images/tally.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Tally Logo">
-                        Tally-Page</a></li>
-                    </ul>
-                    </div>
-                </div>
-                </div>
-            </li> 
-            </ul>
-            <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
-        </div>
-    </nav>
+        <!-- NAV -->
+        <header class="text-center">  
+            {% include 'navbar.html' %}  
+        </header> 
 
-</header>  
-
-    <!-- BANNER --> 
-    <div class="search-container">  
-        <div class="banner">  
-        <!-- scan bar -->  
-            <form onsubmit="event.preventDefault(); searchItemTag(document.getElementsByName('scanned_number')[0].value);" class="search-bar">   
-                <input type="search" name="scanned_number" pattern=".*\S.*" required>  
-                <button class="search-btn" type="submit">  
-                    <span>SEARCH</span>  
-                </button>  
-            </form> 
-            <div>
-                <select class="txt-files-dropdown" id="txt-files-dropdown"></select>
-            </div>
-            <div class="controls-container"> 
-                <div>
-                    <button id="archiveButton" class="archiveButton" onclick="restoreOriginalTable()">ARCHIVE</button> 
-                    <button id="backButton" class="backButton" onclick="restoreOriginalTable()">BACK</button>   
-                </div>
-                <div id="line-count-indicator" class="line-count-indicator"></div>  
-            </div>  
-        </div>
-    </div>  
-    
     <!-- PASSWORD MODAL -->
     <div id="passwordModal" class="modal" tabindex="-1" role="dialog">  
         <div class="modal-dialog" role="document">  
@@ -125,35 +39,50 @@
           </div>  
         </div>  
       </div>  
-
-    <!-- CONTENT -->
-    <div class="content-container" style="display: none;">  
-        <div class="designed-status">  
-            <table class="table table-striped" id="designed-status-table">  
-                <thead class="table-banner">  
+  
+    <!-- CONTENT -->  
+    <div class="content-container" style="display: none;"> 
+    
+    <!-- BANNER -->   
+        <div class="admin-banner">
+            <p class="search_header">Scan ItemID or Order Numer here:</p>  
+            <!-- scan bar -->  
+            <form onsubmit="event.preventDefault(); searchItemTag(document.getElementsByName('scanned_number')[0].value);" class="search-bar">  
+                <input type="search" name="scanned_number" pattern=".*\S.*" required>  
+                <button class="search-btn" type="submit">  
+                    <span>SEARCH</span>  
+                </button>  
+            </form>  
+        </div>  
+      
+        <div class="database-status">  
+            <table class="table table-striped" id="database-table" style="display: none;">  
+                <thead>  
                     <tr>  
-                        <th>Item ID</th>
-                        <th>Order Number</th>  
-                        <th>Item Name</th>                         
-                        <th>Status</th>  
-                        <th>Last Scan</th>                           
-                        <th>SKU</th> 
-                        <th>Total Qty</th>
-                        <th>CUBBY</th>
-                        <th>Batch</th>
+                        <th class="table-banner">Line ID</th>  
+                        <th class="table-banner">Item ID</th>  
+                        <th class="table-banner">Order Number</th>  
+                        <th class="table-banner">SKU</th>  
+                        <th class="table-banner">Status</th>  
+                        <th class="table-banner">Description</th>  
+                        <th class="table-banner">Last Scan</th>  
+                        <!-- <th class="table-banner">Scanned By</th>   -->
+                        <th class="table-banner">Qty</th>  
+                        <th class="table-banner">CUBBY</th>  
+                        <th class="table-banner">Order Date</th>  
                     </tr>  
                 </thead>  
                 <tbody>  
-                    <!-- The content of the Designed_status.txt file will be inserted here -->  
+                    <!-- Rows will be populated by JavaScript -->  
                 </tbody>  
             </table>  
-        </div>   
-
-    <script src="{{ url_for('static', filename='js/config.js') }}"></script> 
-    <script src="{{ url_for('static', filename='js/admin.js') }}"></script> 
-    <!-- <script src="{{ url_for('static', filename='js/penguin.js') }}"></script> -->
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>  
-</body>  
+        </div>  
+    </div>    
   
-</html>    
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  
+    <script src="{{ url_for('static', filename='js/config.js') }}"></script>  
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>  
+</body> 
+</html> 

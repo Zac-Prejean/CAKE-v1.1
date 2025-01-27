@@ -20,76 +20,15 @@
   
 <body>  
   
+    <!-- NAV -->
     <header class="text-center">  
-      
-        <!-- NAV -->  
-        <nav>
-            <div class="wrapper">
-                <div>
-                    <div class="cakeLogo">  
-                        <a href="#"><img src="{{ url_for('static', filename='images/CakeSiteLogo.svg') }}" alt="Cake Logo"></a>  
-                    </div> 
-                    <div class="signedInUser" id="signedInUser"></div> <!-- Placeholder for the signed-in user name -->  
-                </div>
-                <input type="radio" name="slider" id="menu-btn">
-                <input type="radio" name="slider" id="close-btn">
-                <ul class="nav-links">
-                <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('admin') }}">Admin</a></li>
-                <li>
-                    <button id="productionBtn" class="desktop-item production-btn">Production</button>   
-                    <button id="productionBtnMobile" class="mobile-item production-btn">Production</button>
-                    <div class="mega-box">
-                    <div class="content">
-                        <div class="navrow jimjim">
-                        <img src="{{ url_for('static', filename='images/home/Imwatchingyou_edit.png') }}" class="jimjim" alt="Jimmy is Watching">
-                        </div>
-                        <div class="navrow">
-                        <header class="dropdown-header">PrintLayotLab</header>  
-                        <ul class="mega-links dropdown-links">
-                            <li><a class="m-0" href="{{ url_for('precheck') }}">  
-                            <img src="{{ url_for('static', filename='images/precheck.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Precheck Logo">  
-                        Precheck</a></li>
-                            <li><a class="m-0" href="{{ url_for('designer') }}">
-                            <img src="{{ url_for('static', filename='images/designer.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Template Logo">
-                        Designer</a></li>
-                            <li><a class="m-0" href="{{ url_for('templatemerger') }}">  
-                            <img src="{{ url_for('static', filename='images/template.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Designer Logo">  
-                        TemplateMerger</a></li>
-                        </ul>
-                        </div>
-                        <div class="navrow">  
-                        <header class="dropdown-header">ScanStations</header>  
-                        <ul class="mega-links dropdown-links">
-                            <li><a href="{{ url_for('scanIn') }}"><img src="{{ url_for('static', filename='images/scanIn.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Scan-In Logo">
-                            Scan-In</a></li>
-                            <li><a href="{{ url_for('printStation') }}"><img src="{{ url_for('static', filename='images/printstation.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Print Logo">
-                            PrintStation</a></li>
-                            <li><a href="{{ url_for('scanOut') }}"><img src="{{ url_for('static', filename='images/scanOut.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Scan-out Logo">
-                            Scan-Out</a></li>
-                        </ul>
-                        </div>
-                        <div class="navrow">  
-                        <header class="dropdown-header">ShippingStations</header>  
-                        <ul class="mega-links dropdown-links"> 
-                            <li><a href="{{ url_for('cubbysystem') }}"><img src="{{ url_for('static', filename='images/cubbyhole.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="CubbyHole Logo">
-                            CubbyHole</a></li>
-                            <li><a href="{{ url_for('shipOut') }}"><img src="{{ url_for('static', filename='images/shipping.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Ship-Out Logo">
-                            Ship-Out</a></li>
-                            <li><a href="{{ url_for('tallyPage') }}"><img src="{{ url_for('static', filename='images/tally.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Tally Logo">
-                            Tally-Page</a></li>
-                        </ul>
-                        </div>
-                    </div>
-                    </div>
-                </li>
-                </ul>
-                <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
-            </div>
-        </nav>
+        {% include 'navbar.html' %}  
+    </header> 
     
-    </header>
+    <div>
+        <div class="signedInUser" id="signedInUser"></div>
+    </div>
+
     <body> 
     <!-- SIGN-IN MODAL -->  
       <div id="signinModal" class="modal" tabindex="-1" role="dialog">  
@@ -105,16 +44,44 @@
                 </div>  
             </div>  
         </div>  
-    </div>  
+    </div> 
+        <!-- WARNING MODAL -->  
+        <div class="modal" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModal-label" aria-hidden="true">  
+            <div class="modal-dialog" role="document">  
+                <div class="modal-content">  
+                    <div class="warningBanner">  
+                        <h4>WARNING!</h4>  
+                    </div>  
+                    <div class="modal-header">  
+                        <h5 class="modal-title" id="alreadyScannedModalLabel">Mismatch Stage</h5>  
+                    </div>  
+                    <div class="modal-body">  
+                        <p id="modal-text"></p>  
+                        <h5>Enter password to proceed:</h5>  
+                        <input type="password" id="warningPasswordInput" class="form-control" placeholder="Password">  
+                    </div>  
+                    <div class="modal-footer">  
+                        <button type="button" class="btn btn-primary submitButton" id="warningSubmitButton">SUBMIT</button>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>   
 
 <main>
         <!-- BANNER -->
         <div class="text-center p-4">
             <h1>Ship-Out Station</h1>
         </div>
-        
-        <div class="container">
-            <div class="left-container">
+
+        <!-- MAIN DISPLAY -->
+        <div class="content-container">
+            <div class="help-tools-container">  
+                <img src="{{ url_for('static', filename='images/expedited_order.svg') }}" width="50" height="50" class="help-tools" alt="Expedited Order Logo" data-toggle="tooltip" data-placement="top" title="Expedited order: These orders are PRIORITY and should be shipped out first.">  
+                <img src="{{ url_for('static', filename='images/multi_line.svg') }}" width="50" height="50" class="help-tools" alt="Multi-Line Order Logo" data-toggle="tooltip" data-placement="top" title="Multi-line order: These orders have DIFFERENT items within the order and should be double checked before shipping out.">  
+                <img src="{{ url_for('static', filename='images/multi_order.svg') }}" width="50" height="50" class="help-tools" alt="Multi Order Logo" data-toggle="tooltip" data-placement="top" title="Multi order: These orders have MULTIPLE items within the order and will need a cubby number.">  
+                <img src="{{ url_for('static', filename='images/duplacate_order.svg') }}" width="50" height="50" class="help-tools" alt="Duplicate Order Logo" data-toggle="tooltip" data-placement="top" title="Duplicate item: These orders have the SAME items within the order and should have similar items together or close by.">  
+            </div>
+            <div class="main-display">
                 <h2>Order Information</h2>
                 <div class="json-display">
                     <label for="packageqty" class="label">Items in Package</label>
@@ -144,37 +111,6 @@
                     </div>
                     <button class="button" id="shipButton" onclick="shipbutton()">Ship Order</button>
                 </div> 
-            </div>
-        </div>
-        <!-- STATUS MODAL -->  
-        <div id="myModal" class="modal">  
-     
-            <div class="modal-content">     
-              <div class="modal-banner">WARNING!</div>
-              <div class="modal-header">  
-                <h5 class="modal-title" id="alreadyScannedModalLabel">Mismatch Stage</h5>  
-              </div>
-              <div class="modal-body">
-              <p id="modal-text"></p>  
-              </div> 
-              <div class="modal-footer">  
-              <span class="close">&times;</span> 
-              </div>
-            </div>  
-          </div>
-
-        <!-- Quantity Modal -->  
-        <div id="quantityModal" class="modal"> 
-
-            <div class="modal-content"> 
-                <div class="confirm-banner">CONFIRM</div>
-                <div class="modal-header">
-                <h5 class="modal-title" id="modal-message"></h5>
-                </div>
-                <div class="modal-footer">
-                <button id="confirmButton" class="confirmButton"></button>  
-                <button id="cancelButton" class="cancelButton"></button> 
-                </div>
             </div>
         </div>
 </main>

@@ -1,3 +1,6 @@
+<!-- home.html -->
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -16,72 +19,9 @@
   <body>
 
     <header class="text-center">  
-  
-      <!-- NAV -->  
-      <nav>
-        <div class="wrapper">
-          <div class="cakeLogo">  
-            <a href="#"><img src="{{ url_for('static', filename='images/CakeSiteLogo.svg') }}" alt="Cake Logo"></a>  
-          </div> 
-            <input type="radio" name="slider" id="menu-btn">
-            <input type="radio" name="slider" id="close-btn">
-            <ul class="nav-links">
-            <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('admin') }}">Admin</a></li>
-            <li>
-                <button id="productionBtn" class="desktop-item production-btn">Production</button>   
-                <button id="productionBtnMobile" class="mobile-item production-btn">Production</button>
-                <div class="mega-box">
-                <div class="content">
-                  <div class="navrow jimjim">
-                    <img src="{{ url_for('static', filename='images/home/Imwatchingyou_edit.png') }}" class="jimjim" alt="Jimmy is Watching">
-                    </div>
-                    <div class="navrow">
-                    <header class="dropdown-header">PrintLayotLab</header>  
-                    <ul class="mega-links dropdown-links">
-                        <li><a class="m-0" href="{{ url_for('precheck') }}">  
-                        <img src="{{ url_for('static', filename='images/precheck.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Precheck Logo">  
-                    Precheck</a></li>
-                        <li><a class="m-0" href="{{ url_for('designer') }}">
-                        <img src="{{ url_for('static', filename='images/designer.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Template Logo">
-                    Designer</a></li>
-                        <li><a class="m-0" href="{{ url_for('templatemerger') }}">  
-                        <img src="{{ url_for('static', filename='images/template.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Designer Logo">  
-                    TemplateMerger</a></li>
-                    </ul>
-                    </div>
-                    <div class="navrow">  
-                    <header class="dropdown-header">ScanStations</header>  
-                    <ul class="mega-links dropdown-links">
-                        <li><a href="{{ url_for('scanIn') }}"><img src="{{ url_for('static', filename='images/scanIn.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Scan-In Logo">
-                        Scan-In</a></li>
-                        <li><a href="{{ url_for('printStation') }}"><img src="{{ url_for('static', filename='images/printstation.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Print Logo">
-                        PrintStation</a></li>
-                        <li><a href="{{ url_for('scanOut') }}"><img src="{{ url_for('static', filename='images/scanOut.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Scan-out Logo">
-                        Scan-Out</a></li>
-                    </ul>
-                    </div>
-                    <div class="navrow">  
-                    <header class="dropdown-header">ShippingStations</header>  
-                    <ul class="mega-links dropdown-links"> 
-                        <li><a href="{{ url_for('cubbysystem') }}"><img src="{{ url_for('static', filename='images/cubbyhole.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="CubbyHole Logo">
-                        CubbyHole</a></li>
-                        <li><a href="{{ url_for('shipOut') }}"><img src="{{ url_for('static', filename='images/shipping.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Ship-Out Logo">
-                        Ship-Out</a></li>
-                        <li><a href="{{ url_for('tallyPage') }}"><img src="{{ url_for('static', filename='images/tally.svg') }}" width="30" height="30" class="icon d-inline-block align-center" alt="Tally Logo">
-                        Tally-Page</a></li>
-                    </ul>
-                    </div>
-                </div>
-                </div>
-            </li> 
-            </ul>
-            <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
-        </div>
-    </nav>
-  
-  </header>
+      <!-- Include the navbar -->
+      {% include 'navbar.html' %}
+  </header> 
 
     <div class="container mt-5">
       <div class="row">
@@ -103,8 +43,11 @@
               <li><a href="#templatemerger" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">When to use the TemplateMerger</a></li>  
               <h5>Scan Stations</h5>
               <li><a href="#scanStations" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Item Display and Status Update Process</a></li>  
+              <li><a href="#redo" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">What to do with Orders that are Not Quite Right</a></li>  
+              <h5>Shipping Stations</h5> 
               <li><a href="#cubbyhole" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Using the CubbyHole System for Storing Multiple Items</a></li>  
               <li><a href="#shipping" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Shipping Out and Admin Privileges</a></li> 
+              <li><a href="#tally" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Keeping Score with the TallyPage</a></li> 
               <li><a href="#warnings" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Warnings and Confirmation</a></li> 
             </ul>  
           </div> 
@@ -230,8 +173,9 @@
                         <ol>
                         <li>Scan the Item-ID QR code on the given label.</li>
                         <li>An image will appear on screen with a indicator to the side on which the item needs to be printed on.</li>
+                        <li>The Scan-In Station states that users are excepting the Item's label and will start the creation process.</li>
                         <img src="{{ url_for('static', filename='images/home/scanIn.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
-                        <li>The Print Station enables users to view a final sample image for evaluating the item's placement before proceeding.</li>
+                        <li>The Print Station enables users to view a final sample image for evaluating the item's placement before proceeding. It also states that the Item has been created and is ready for processing to the next step.</li>
                         <li>The numbers must be scanned using the AutoHotKeys tab. To ensure proper functionality, this station should be opened with Google Chrome and have access to the Everything Folder.</li>
                         <img src="{{ url_for('static', filename='images/home/scanOut.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
                         <li>Lastly, there is the Scan-Out Station, which serves as the final quality control checkpoint for most orders. Users must ensure that all information in the item image and details is accurate before proceeding further.</li>
@@ -242,17 +186,90 @@
                     </div>
                   </div>
                   <hr>
+                  <div id="redo">  
+                    <img src="{{ url_for('static', filename='images/redo_green.svg') }}" width="60" height="60" class="m-3 d-inline-block align-center" alt="Shipping Logo">  
+                      <div>  
+                        <h3>What to do with Orders that are Not Quite Right</h3> 
+                        <p></p>
+                          <ol>
+                          <li>The Redo Station is designed to monitor and track all orders that contain errors or discrepancies.</li>
+                          <li>Scan the Order Number and Item ID associated with the item that needs to be returned for correction.</li>                          
+                          <li>Select the appropriate reason for the item's error from the provided list of reasons.</li>
+                          <img src="{{ url_for('static', filename='images/home/redo_page.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                          <li>Valid reasons for which an item may be incorrect include:</li>
+                          <ul class="info_text">  
+                            <li>  
+                                WRONG ITEM  
+                                <div class="info">The item received is not the one that was ordered.</div>  
+                            </li>  
+                            <li>  
+                                WRONG SIZE  
+                                <div class="info">The size of the item received does not match the size ordered.</div>  
+                            </li>  
+                            <li>  
+                                WRONG COLOR  
+                                <div class="info">The color of the item received is different from the color ordered.</div>  
+                            </li>  
+                            <li>  
+                                MISSING ITEM  
+                                <div class="info">An item that was supposed to be included in the order is missing.</div>  
+                            </li>  
+                            <li>  
+                                Bad Plating  
+                                <div class="info">The plating on the item is of poor quality or defective.</div>  
+                            </li>  
+                            <li>  
+                                Bad Sanding  
+                                <div class="info">The sanding on the item is inadequate or uneven.</div>  
+                            </li>  
+                            <li>  
+                                Operator Error  
+                                <div class="info">A mistake was made by the operator during the manufacturing process.</div>  
+                            </li>  
+                            <li>  
+                                QC Fail  
+                                <div class="info">The item did not pass quality control checks.</div>  
+                            </li>  
+                        </ul>  
+
+                          <img src="{{ url_for('static', filename='images/home/error_status.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                          <li>An <a href="#warnings" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">"ERROR"</a> status will be given to the Item.</li>
+                          </ol>
+                          <a href="{{ url_for('redo') }}" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Go to the Redo Page</a>
+                        </ol>  
+                      </div>
+                    </div>
+                    <hr>
                   <div id="cubbyhole">  
                     <img src="{{ url_for('static', filename='images/cubbyhole_green.svg') }}" width="60" height="60" class="m-3 d-inline-block align-center" alt="CubbyHole Logo">  
                       <div>  
                         <h3>Using the CubbyHole System for Storing Multiple Items</h3> 
                         <p></p>
                           <ol>
-                          <li>Scan the Item-ID QR code on the given label.</li>
-                          <li>An image will appear on screen with a indicator to the side on which the item needs to be printed on.</li>
-                          <img src="{{ url_for('static', filename='images/home/scanIn.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                          <li>The CubbyHole is intended to store all orders containing multiple items, facilitating easier searchability and retrieval.</li>
+                          <img src="{{ url_for('static', filename='images/home/cubby.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                          <li>The Bins may display a variety of colors. These colors include:</li>
+                          <ul class="cubby-colors">
+                            <div class="blue-bin" alt="Blue Bin Color" data-placement="top"></div>  
+                            <li>Blue-Bin is still waiting on items and not yet complete.</li>
+                            <div class="green-bin" alt="Green Bin Color" data-placement="top"></div>  
+                            <li>Green-Bin has been completed and is ready to be shipped.</li>
+                            <div class="pink-bin" alt="Pink Bin Color" data-placement="top"></div>  
+                            <li>Pink-Bin has just been added to the Cubby page within the last 10 minutes.</li>
+                            <div class="yellow-bin" alt="Yellow Bin Color" data-placement="top"></div>  
+                            <li>Yellow-Bin has been created over 24 hour ago. The missing items should be searched in order to complete the bin.</li>
+                            <div class="red-bin" alt="Red Bin Color" data-placement="top"></div>  
+                            <li>The Red Bin was created over 48 hours ago and is likely overdue.</li>
+                          </ul>
+                          <img src="{{ url_for('static', filename='images/home/inside_bin.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                          <li>Utilize the search bar to locate Order Numbers or Item IDs.</li>
+                          <li>Select a bin or use the search bar to display the contents of a bin.</li>
+                          <img src="{{ url_for('static', filename='images/home/confirm_delete.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                          <li>If the bin contains all items required to complete the order, its color will change to green. The order can then be completed by clicking the 'Complete' button.</li>  
+                          <li>If a bin needs to be closed because the order has already shipped or the bin is no longer needed, the 'Delete' button can be used to close the bin.</li> 
+
                           </ol>
-                          <a href="{{ url_for('scanIn') }}" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Go to the Scan-In Station</a>
+                          <a href="{{ url_for('cubbysystem') }}" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Go to the Cubby Page</a>
                         </ol>  
                       </div>
                     </div>
@@ -263,36 +280,53 @@
                           <h3>Shipping Out and Admin Privileges</h3> 
                           <p></p>
                             <ol>
-                            <li>Scan the Item-ID QR code on the given label.</li>
-                            <li>An image will appear on screen with a indicator to the side on which the item needs to be printed on.</li>
-                            <img src="{{ url_for('static', filename='images/home/scanIn.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
-                            <li>The Print Station enables users to view a final sample image for evaluating the item's placement before proceeding.</li>
-                            <li>The numbers must be scanned using the AutoHotKeys tab. To ensure proper functionality, this station should be opened with Google Chrome and have access to the Everything Folder.</li>
-                            <img src="{{ url_for('static', filename='images/home/scanOut.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
-                            <li>Lastly, there is the Scan-Out Station, which serves as the final quality control checkpoint for most orders. Users must ensure that all information in the item image and details is accurate before proceeding further.</li>
-                            <li>A <a href="#warnings" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">confirmation notification</a> will appear for each scanned number. Once confirmed, the shipping label will automatically print for the item, unless the order contains multiple items. In that case, the CubbyHole system is utilized to manage multi-item orders.</li>
+                              <li>The Ship-Out Station is used to efficiently ship orders without the need for third-party sites.</li>  
+                              <li>Scan the order number to initiate the shipping process. Ensure that the information matches the order details.</li>  
+                            <img src="{{ url_for('static', filename='images/home/ship_out_station.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                              <li>Most pages within the CAKE system require a sign-in, and some are restricted to Admin use only. This ensures that orders and items are processed accurately and sent to the correct locations.</li> 
+                              <img src="{{ url_for('static', filename='images/home/sign-in.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner"> 
+                              <li>Only cards with the numbers 01 or 02 have access to Admin privileges.</li>  
                             </ol>
-                            <a href="{{ url_for('scanIn') }}" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Go to the Scan-In Station</a>
+                            <a href="{{ url_for('shipOut') }}" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Go to the Shipping Station</a>
                           </ol>  
                         </div>
                       </div>
                       <hr>
+                      <div id="tally">  
+                        <img src="{{ url_for('static', filename='images/tally_green.svg') }}" width="60" height="60" class="m-3 d-inline-block align-center" alt="Tally Logo">  
+                          <div>  
+                            <h3>Keeping Score with the TallyPage</h3> 
+                            <p></p>
+                              <ol>
+                              <li>The Tally Page is designed to track and record a user's input and output.</li>
+                              <li>The numerical data on the page represent the quantity and type of work the user has accomplished for the day.</li>
+                              <img src="{{ url_for('static', filename='images/home/tally_page_score.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                              <li>A gold circle, representing the user with the highest score, is positioned at the top of the table. This is followed by silver and bronze circles for the subsequent top performers.</li>
+                              <img src="{{ url_for('static', filename='images/home/tally_in-out.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                              <li>Two numbered circles are located on the left-hand side of the page. The upper circle indicates the number of items that have been added to CAKE for the day, while the lower circle shows the total number of items completed for the day so far.</li>
+                              </ol>
+                              <a href="{{ url_for('tallyPage') }}" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Go to the Tally Page</a>
+                            </ol>  
+                          </div>
+                        </div>
+                        <hr>
                       <div id="warnings">  
                         <img src="{{ url_for('static', filename='images/warnings_green.svg') }}" width="120" height="60" class="m-3 d-inline-block align-center" alt="Warnings Logo">  
                           <div>  
                             <h3>Warnings and Confirmation</h3> 
                             <p></p>
                               <ol>
-                              <li>Scan the Item-ID QR code on the given label.</li>
-                              <li>An image will appear on screen with a indicator to the side on which the item needs to be printed on.</li>
-                              <img src="{{ url_for('static', filename='images/home/scanIn.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
-                              <li>The Print Station enables users to view a final sample image for evaluating the item's placement before proceeding.</li>
-                              <li>The numbers must be scanned using the AutoHotKeys tab. To ensure proper functionality, this station should be opened with Google Chrome and have access to the Everything Folder.</li>
-                              <img src="{{ url_for('static', filename='images/home/scanOut.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
-                              <li>Lastly, there is the Scan-Out Station, which serves as the final quality control checkpoint for most orders. Users must ensure that all information in the item image and details is accurate before proceeding further.</li>
-                              <li>A <a href="#warnings" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">confirmation notification</a> will appear for each scanned number. Once confirmed, the shipping label will automatically print for the item, unless the order contains multiple items. In that case, the CubbyHole system is utilized to manage multi-item orders.</li>
+                              <li>CAKE has been streamlined to ensure maximum efficiency. Robust systems are in place to guarantee that orders and items are correctly positioned and on schedule for accurate shipping.</li>
+                              <li>These systems include:</li>
+                              <img src="{{ url_for('static', filename='images/home/missmatch-stage.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                              <li>MISMATCH STAGE: This stage indicates that the scanned item is either not in the correct stage for progression or cannot be located within the system.</li>
+                              <img src="{{ url_for('static', filename='images/home/sign-in.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                              <li>If the user is redirected to the homepage when attempting to sign in, it indicates that either they are not registered in the system or the system requires a restart. When a PC is powered off or put into sleep mode overnight, the system will lock out users as a safety feature, necessitating a restart.</li>
+                              <li>If the user is redirected to the homepage when attempting to sign into an ADMIN restricted page, it usually indicates that the user does not have the necessary access permissions.</li>
+                              <li>If the user is attempting to sign and the page goes blank, it usually indicates that the user input the wrong sign-in code.</li>
+                              <img src="{{ url_for('static', filename='images/home/missing_cubby.png') }}" class="img-fluid shadow-sm " alt="Completeful Banner">
+                              <li>If the user misses the given cubby number, they can either locate it by scanning the Order Number in the CubbyHole search bar or ask an Admin to find it on the ADMIN Page. If no cubby number is listed on the ADMIN Page, it might indicate that the user pressed the SUBMIT button before a number was assigned. The SUBMIT button on the Sign-Out Page is intended only for items that need to be manually input. The system is designed to automatically assign cubby numbers.</li>
                               </ol>
-                              <a href="{{ url_for('scanIn') }}" class="link-success link-offset-2 link-opacity-75 link-underline-opacity-10 link-underline-opacity-75-hover">Go to the Scan-In Station</a>
                             </ol>  
                           </div>
                         </div>
